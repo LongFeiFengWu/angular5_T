@@ -1,0 +1,14 @@
+.layui-layout-login {
+    width: 30%;
+    height: auto;
+    overflow: hidden;
+    margin: 8% auto 0 auto;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 40px;
+    padding-bottom: 20px;
+    box-shadow: 0 -15px 30px #658fc1;
+    border-radius: 5px;
+    z-index: 1000;
+}
+

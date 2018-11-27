@@ -1,0 +1,484 @@
+<app-alert [alert]="alert" [timeout]="3000" [msg]="msg" (msg_)="reloadAlertMsg($event)" ></app-alert>
+
+<app-content-header [firstName]="firstName" [secondName]="secondName" [detail]="detail"></app-content-header>
+
+<!-- Main content -->
+<section class="content">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="box">
+        <div class="box-header with-border">
+          <h3 class="box-title">角色详情</h3>
+          <div class="btn-group" style="margin-left:10px;">
+            <button type="button" class="btn btn-info" (click)="addRole(modalRoleTemplate)"><i class="fa fa-plus"></i>
+            </button>
+            <button type="button" class="btn btn-info" (click)="editRole(modalRoleTemplate)"><i class="fa fa-pencil"></i>
+            </button>
+            <button type="button" class="btn btn-info" (click)="deleteRole()"><i class="fa fa-trash"></i></button>
+
+            <div class="btn-group" dropdown>
+              <button id="button-api" type="button" dropdownToggle class="btn btn-primary dropdown-toggle" aria-controls="dropdown-api">
+                {{selectedLinkName}}<span class="caret"></span>
+              </button>
+              <ul id="dropdown-api" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-api">
+                <li role="menuitem" (click)="selectLinkName('授权API')" ><a class="dropdown-item">授权API</a></li>
+                <li role="menuitem" (click)="selectLinkName('授权菜单')" ><a class="dropdown-item">授权菜单</a></li>
+                <li role="menuitem" (click)="selectLinkName('关联用户')" ><a class="dropdown-item">关联用户</a></li>
+              </ul>
+            </div>
+
+          </div>
+
+          <div class="box-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+              <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+
+              <div class="input-group-btn">
+                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="box-body table-responsive">
+          <table class="table table-hover table-bordered">
+            <tr>
+              <th style="width: 8px;"></th>
+              <th>ID</th>
+              <th>名称</th>
+              <th>编码</th>
+              <th>状态</th>
+            </tr>
+            <tr *ngFor="let item of roles" (click)="selectRole(item)" [ngClass]="{'active': (selectedRole?.id===item.id)}" >
+              <!--<td><input type="checkbox" checked="{{selectedApi?.id===item.id ? 'checked':''}}" class="mini" (click)="selectApi(item);" ></td>-->
+              <td style="width: 8px;"></td>
+              <td>{{item.id}}</td>
+              <td>{{item.name}}</td>
+              <td>{{item.code}}</td>
+              <td>{{item.status===1 ? '正常' : '禁用'}}</td>
+            </tr>
+            <tr>
+              <td colspan="9">
+                <form class="form-inline" style="float:right;">
+                  <div class="form-group">
+                    <pagination [disabled]="false" [totalItems]="roleTotalItems"
+                                [itemsPerPage]="rolePageSize"
+                                (pageChanged)="rolePageChanged($event)"
+                                [maxSize]="6" [boundaryLinks]="true" class="pagination-sm"
+                                previousText="&lsaquo;" nextText="&rsaquo;"
+                                firstText="&laquo;" lastText="&raquo;">
+                    </pagination>
+                  </div>
+                </form>
+              </td>
+            </tr>
+          </table>
+
+          <div>选中角色：<span style="font-weight: bold;">{{selectedRole?.name}}</span></div>
+        </div>
+      </div>
+      <!-- /.box -->
+    </div>
+
+    <div *ngIf="selectedLinkName === '授权API'" class="col-md-6">
+      <div class="box">
+        <div class="box-header with-border">
+          <h3 class="box-title"><span class="small">{{selectedRole?.name}}</span>授权API</h3>
+          <div class="btn-group" style="margin-left:10px;">
+            <button type="button" class="btn btn-info" (click)="addRoleApi(modalRoleApiTemplate)"><i class="fa fa-plus"></i>
+            </button>
+            <button type="button" class="btn btn-info" (click)="deleteRoleApi()"><i class="fa fa-trash"></i></button>
+          </div>
+
+          <div class="box-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+              <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+
+              <div class="input-group-btn">
+                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="box-body table-responsive">
+          <table class="table table-hover table-bordered">
+            <tr>
+              <th>ID</th>
+              <th>名称</th>
+              <th>URI</th>
+              <th>访问方式</th>
+              <th>状态</th>
+            </tr>
+            <tr *ngFor="let item of apis" (click)="selectRoleApi(item)" [ngClass]="{'active': (selectedRoleApi?.id===item.id)}" >
+              <!--<td><input type="checkbox" checked="{{selectedApi?.id===item.id ? 'checked':''}}" class="mini" (click)="selectApi(item);" ></td>-->
+              <td>{{item.id}}</td>
+              <td>{{item.name}}</td>
+              <td>{{item.uri}}</td>
+              <td>{{item.method}}</td>
+              <td>{{item.status===1? '有效':'禁用'}}</td>
+            </tr>
+            <tr>
+              <td colspan="9">
+                <form class="form-inline" style="float:right;">
+                  <div class="form-group">
+                    <pagination [disabled]="false" [totalItems]="apiTotalItems"
+                                [itemsPerPage]="apiPageSize"
+                                (pageChanged)="apiPageChanged($event)"
+                                [maxSize]="6" [boundaryLinks]="true" class="pagination-sm"
+                                previousText="&lsaquo;" nextText="&rsaquo;"
+                                firstText="&laquo;" lastText="&raquo;">
+                    </pagination>
+                  </div>
+                </form>
+              </td>
+            </tr>
+          </table>
+
+          <div>选中API：<span style="font-weight: bold;">{{selectedRoleApi?.name}}</span></div>
+        </div>
+      </div>
+      <!-- /.box -->
+    </div>
+
+    <div *ngIf="selectedLinkName === '授权菜单'" class="col-md-6">
+      <div class="box">
+        <div class="box-header with-border">
+          <h3 class="box-title"><span class="small">{{selectedRole?.name}}</span>授权菜单</h3>
+          <div class="btn-group" style="margin-left:10px;">
+            <button type="button" class="btn btn-info" (click)="addRoleMenu(modalRoleMenuTemplate)"><i class="fa fa-plus"></i>
+            </button>
+            <button type="button" class="btn btn-info" (click)="deleteRoleMenu()"><i class="fa fa-trash"></i></button>
+          </div>
+
+          <div class="box-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+              <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+
+              <div class="input-group-btn">
+                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="box-body table-responsive">
+          <table class="table table-hover table-bordered">
+            <tr>
+              <th>ID</th>
+              <th>名称</th>
+              <th>编码</th>
+              <th>URI</th>
+              <th>状态</th>
+            </tr>
+            <tr *ngFor="let item of menus" (click)="selectRoleMenu(item)" [ngClass]="{'active': (selectedRoleMenu?.id===item.id)}" >
+              <!--<td><input type="checkbox" checked="{{selectedApi?.id===item.id ? 'checked':''}}" class="mini" (click)="selectApi(item);" ></td>-->
+              <td>{{item.id}}</td>
+              <td>{{item.name}}</td>
+              <td>{{item.code}}</td>
+              <td>{{item.uri}}</td>
+              <td>{{item.status===1? '有效':'禁用'}}</td>
+            </tr>
+            <tr>
+              <td colspan="9">
+                <form class="form-inline" style="float:right;">
+                  <div class="form-group">
+                    <pagination [disabled]="false" [totalItems]="menuTotalItems"
+                                [itemsPerPage]="menuPageSize"
+                                (pageChanged)="menuPageChanged($event)"
+                                [maxSize]="6" [boundaryLinks]="true" class="pagination-sm"
+                                previousText="&lsaquo;" nextText="&rsaquo;"
+                                firstText="&laquo;" lastText="&raquo;">
+                    </pagination>
+                  </div>
+                </form>
+              </td>
+            </tr>
+          </table>
+
+          <div>选中菜单：<span style="font-weight: bold;">{{selectedRoleMenu?.name}}</span></div>
+        </div>
+      </div>
+      <!-- /.box -->
+    </div>
+
+    <div *ngIf="selectedLinkName === '关联用户'" class="col-md-6">
+      <div class="box">
+        <div class="box-header with-border">
+          <h3 class="box-title"><span class="small">{{selectedRole?.name}}</span>关联用户</h3>
+          <div class="btn-group" style="margin-left:10px;">
+            <button type="button" class="btn btn-info" (click)="addRoleUser(modalRoleUserTemplate)"><i class="fa fa-plus"></i>
+            </button>
+            <button type="button" class="btn btn-info" (click)="deleteRoleUser()"><i class="fa fa-trash"></i></button>
+          </div>
+
+          <div class="box-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+              <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+
+              <div class="input-group-btn">
+                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="box-body table-responsive">
+          <table class="table table-hover table-bordered">
+            <tr>
+              <th>UID</th>
+              <th>名称</th>
+              <th>电话</th>
+              <th>邮箱</th>
+              <th>状态</th>
+            </tr>
+            <tr *ngFor="let item of users" (click)="selectRoleUser(item)" [ngClass]="{'active': (selectedRoleUser?.uid===item.uid)}" >
+              <!--<td><input type="checkbox" checked="{{selectedApi?.id===item.id ? 'checked':''}}" class="mini" (click)="selectApi(item);" ></td>-->
+              <td>{{item.uid}}</td>
+              <td>{{item.username}}</td>
+              <td>{{item.phone}}</td>
+              <td>{{item.email}}</td>
+              <td>{{item?.status | formatUserStatus }}</td>
+            </tr>
+            <tr>
+              <td colspan="9">
+                <form class="form-inline" style="float:right;">
+                  <div class="form-group">
+                    <pagination [disabled]="false" [totalItems]="userTotalItems"
+                                [itemsPerPage]="userPageSize"
+                                (pageChanged)="userPageChanged($event)"
+                                [maxSize]="6" [boundaryLinks]="true" class="pagination-sm"
+                                previousText="&lsaquo;" nextText="&rsaquo;"
+                                firstText="&laquo;" lastText="&raquo;">
+                    </pagination>
+                  </div>
+                </form>
+              </td>
+            </tr>
+          </table>
+
+          <div>选中用户：<span style="font-weight: bold;">{{selectedRoleUser?.username}}</span></div>
+        </div>
+      </div>
+      <!-- /.box -->
+    </div>
+
+  </div>
+</section>
+
+
+<!-- role modal -->
+<ng-template #modalRoleTemplate>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="bsModalRef.hide()" ><span
+          aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title text-center" style="color: #00c0ef;font-weight: bolder;">{{roleModalName}}</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group has-feedback">
+            <label class="control-label">编码</label>
+            <input [(ngModel)]="role.code" type="text" name="code" class="form-control" placeholder=""
+                   readonly onfocus="this.removeAttribute('readonly');" (keyup.enter)="check()">
+          </div>
+          <div class="form-group has-feedback">
+            <label class="control-label">名称</label>
+            <input [(ngModel)]="role.name" type="text" name="name" class="form-control" placeholder=""
+                   readonly onfocus="this.removeAttribute('readonly');" (keyup.enter)="check()">
+          </div>
+          <div class="form-group has-feedback">
+            <label class="control-label">状态</label>
+            <select [(ngModel)]="role.status" name="status" class="form-control">
+              <option value="1">正常</option>
+              <option value="9">禁用</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">取消</button>
+        <button type="button" class="btn btn-primary" (click)="submitRoleModal()">提交</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- api modal -->
+<ng-template #modalRoleApiTemplate>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="bsModalRef.hide()" ><span
+          aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title " style="color: #00c0ef;font-weight: bolder;">添加API</h4>
+      </div>
+      <div class="modal-body">
+        <!--<div class="box">-->
+
+          <div class="box-body table-responsive">
+            <table class="table table-hover table-bordered">
+              <tr>
+                <th>ID</th>
+                <th>名称</th>
+                <th>URI</th>
+                <th>访问方式</th>
+                <th>状态</th>
+              </tr>
+              <tr *ngFor="let item of modalApis" (click)="selectModalRoleApi(item)" [ngClass]="{'active': (modalSelectedApi?.id===item.id)}" >
+                <!--<td><input type="checkbox" checked="{{selectedApi?.id===item.id ? 'checked':''}}" class="mini" (click)="selectApi(item);" ></td>-->
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.uri}}</td>
+                <td>{{item.method}}</td>
+                <td>{{item.status===1? '有效':'禁用'}}</td>
+              </tr>
+              <tr>
+                <td colspan="5">
+                  <form class="form-inline" style="float:right;">
+                    <div class="form-group">
+                      <pagination [disabled]="false" [totalItems]="modalTotalItems"
+                                  [itemsPerPage]="modalPageSize"
+                                  (pageChanged)="modalPageChanged($event)"
+                                  [maxSize]="4" [boundaryLinks]="true" class="pagination-sm"
+                                  previousText="&lsaquo;" nextText="&rsaquo;"
+                                  firstText="&laquo;" lastText="&raquo;">
+                      </pagination>
+                    </div>
+                  </form>
+                </td>
+              </tr>
+            </table>
+
+          </div>
+        </div>
+      <!--</div>-->
+      <div class="modal-footer">
+        <div class="pull-left">选中API：<span style="font-weight: bold; font-size: medium; color: #00c0ef">{{modalSelectedApi?.name}}</span></div>
+        <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">取消</button>
+        <button type="button" class="btn btn-primary" (click)="submitAddModal()">提交</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- menu modal -->
+<ng-template #modalRoleMenuTemplate>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="bsModalRef.hide()" ><span
+          aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title " style="color: #00c0ef;font-weight: bolder;">添加菜单</h4>
+      </div>
+      <div class="modal-body">
+        <!--<div class="box">-->
+
+        <div class="box-body table-responsive">
+          <table class="table table-hover table-bordered">
+            <tr>
+              <th>ID</th>
+              <th>名称</th>
+              <th>编码</th>
+              <th>URI</th>
+              <th>状态</th>
+            </tr>
+            <tr *ngFor="let item of modalMenus" (click)="selectModalRoleMenu(item)" [ngClass]="{'active': (modalSelectedMenu?.id===item.id)}" >
+              <!--<td><input type="checkbox" checked="{{selectedApi?.id===item.id ? 'checked':''}}" class="mini" (click)="selectApi(item);" ></td>-->
+              <td>{{item.id}}</td>
+              <td>{{item.name}}</td>
+              <td>{{item.code}}</td>
+              <td>{{item.uri}}</td>
+              <td>{{item.status===1? '有效':'禁用'}}</td>
+            </tr>
+            <tr>
+              <td colspan="5">
+                <form class="form-inline" style="float:right;">
+                  <div class="form-group">
+                    <pagination [disabled]="false" [totalItems]="modalTotalItems"
+                                [itemsPerPage]="modalPageSize"
+                                (pageChanged)="modalPageChanged($event)"
+                                [maxSize]="4" [boundaryLinks]="true" class="pagination-sm"
+                                previousText="&lsaquo;" nextText="&rsaquo;"
+                                firstText="&laquo;" lastText="&raquo;">
+                    </pagination>
+                  </div>
+                </form>
+              </td>
+            </tr>
+          </table>
+
+        </div>
+      </div>
+      <!--</div>-->
+      <div class="modal-footer">
+        <div class="pull-left">选中菜单：<span style="font-weight: bold; font-size: medium; color: #00c0ef">{{modalSelectedMenu?.name}}</span></div>
+        <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">取消</button>
+        <button type="button" class="btn btn-primary" (click)="submitAddModal()">提交</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- user modal -->
+<ng-template #modalRoleUserTemplate>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="bsModalRef.hide()" ><span
+          aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title " style="color: #00c0ef;font-weight: bolder;">添加用户</h4>
+      </div>
+      <div class="modal-body">
+        <!--<div class="box">-->
+
+        <div class="box-body table-responsive">
+          <table class="table table-hover table-bordered">
+            <tr>
+              <th>UID</th>
+              <th>名称</th>
+              <th>电话</th>
+              <th>邮箱</th>
+              <th>状态</th>
+            </tr>
+            <tr *ngFor="let item of modalUsers" (click)="selectModalRoleUser(item)" [ngClass]="{'active': (modalSelectedUser?.uid===item.uid)}" >
+              <!--<td><input type="checkbox" checked="{{selectedApi?.id===item.id ? 'checked':''}}" class="mini" (click)="selectApi(item);" ></td>-->
+              <td>{{item.uid}}</td>
+              <td>{{item.username}}</td>
+              <td>{{item.phone}}</td>
+              <td>{{item.email}}</td>
+              <td>{{item?.status | formatUserStatus }}</td>
+            </tr>
+            <tr>
+              <td colspan="5">
+                <form class="form-inline" style="float:right;">
+                  <div class="form-group">
+                    <pagination [disabled]="false" [totalItems]="modalTotalItems"
+                                [itemsPerPage]="modalPageSize"
+                                (pageChanged)="modalPageChanged($event)"
+                                [maxSize]="4" [boundaryLinks]="true" class="pagination-sm"
+                                previousText="&lsaquo;" nextText="&rsaquo;"
+                                firstText="&laquo;" lastText="&raquo;">
+                    </pagination>
+                  </div>
+                </form>
+              </td>
+            </tr>
+          </table>
+
+        </div>
+      </div>
+      <!--</div>-->
+      <div class="modal-footer">
+        <div class="pull-left">选中用户：<span style="font-weight: bold; font-size: medium; color: #00c0ef">{{modalSelectedUser?.username}}</span></div>
+        <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">取消</button>
+        <button type="button" class="btn btn-primary" (click)="submitAddModal()">提交</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

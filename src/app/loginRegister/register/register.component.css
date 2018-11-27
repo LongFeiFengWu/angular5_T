@@ -1,0 +1,27 @@
+
+  .strengthLv1 {
+    background: red;
+    height: 6px;
+    width: 40px;
+    border: 1px solid #ccc;
+    margin-top: 6px;
+    border-radius: 3px;
+  }
+
+  .strengthLv2 {
+    background: orange;
+    height: 6px;
+    width: 80px;
+    border: 1px solid #ccc;
+    margin-top: 6px;
+    border-radius: 3px;
+  }
+
+  .strengthLv3 {
+    background: green;
+    height: 6px;
+    width: 120px;
+    border: 1px solid #ccc;
+    margin-top: 6px;
+    border-radius: 3px;
+  }

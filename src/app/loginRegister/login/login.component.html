@@ -1,0 +1,65 @@
+<img src="/assets/image/bj.jpg" style="position: fixed;z-index: -1;width: 100%;height: 100%;top: 0;">
+<app-alert [alert]="alert" [timeout]="3000" [msg]="msg" (msg_)="reloadAlertMsg($event)"></app-alert>
+<div id="particles-js" style="position: fixed;z-index: -1;width: 100%;height: 100%;top: 0;">
+</div>
+    <div class="layui-layout-login">
+    <!-- login-logo -->
+    <div class="login-logo">
+      <img src="/assets/image/long.jpg" style="max-height: 40px" />
+      <a routerLink="/" routerLinkActive="click"><b style="color: #00a7d0">Long</b></a>
+    </div>
+    <!-- login-body -->
+    <div class="login-box-body" style=" background-color: #ffffff00;">
+    <!--   <p class="login-box-msg"><b style="font-size: medium">登录</b></p> -->
+      <form>
+        <!-- login-appName -->
+        <div class="form-group has-feedback">     
+          <i class="fa fa-user form-control-feedback" aria-hidden="true"></i>
+          <input [(ngModel)]="userName" type="text" name="userName" class="form-control" placeholder="用户名"
+                 readonly onfocus="this.removeAttribute('readonly');" (keyup.enter)="check()">
+         
+        </div>
+        <!-- login-password -->
+        <div class="form-group has-feedback">
+          <i class="fa fa-eye lockicon form-control-feedback" aria-hidden="true"></i>
+          <span class="eye" style="display:inline-block;width:30px;height:30px;position:absolute;right:2px;z-index:100;cursor: pointer;" (click)="changeLock()" title="显示密码" ></span>
+          <input [(ngModel)]="password" type="password" name="password" class="form-control password_input" placeholder="密码"
+                 readonly onfocus="this.removeAttribute('readonly');" (keyup.enter)="check()" >
+          
+        </div>
+
+        <div class="row">
+    <div class="col-xs-6 pull_left">
+        <div class="form-group has-feedback">
+          <i class="fa fa-shield form-control-feedback" aria-hidden="true"></i>
+            <input class="form-control" type="text" [(ngModel)]="verCode" name="verCode" placeholder="验证码" maxlength="4" readonly onfocus="this.removeAttribute('readonly');">
+        </div>
+    </div>
+    <div class="col-xs-6 pull_left">      
+            <img class="imgVerify" src='{{baseUrl}}getVerify' title="点击更换验证码" height="36" width="100%" (click)="getVerify()" >
+    </div>
+</div>
+
+        <!-- login-remember -->
+        <div class="row">
+          <div class="col-xs-8">
+            <!--<div class="checkbox">-->
+            <!--<label>-->
+            <!--<input type="checkbox">记住我-->
+            <!--</label>-->
+            <!--</div>-->
+            <button [disabled]="isDisabled" (click)="login()" type="submit" class="btn btn-primary btn-block btn-flat">登录</button>
+          </div>
+          <!-- login-submit -->
+          <div class="col-xs-4">
+            <button [disabled]="isDisabled"  routerLink="../register" routerLinkActive="active" type="submit"
+                    class="btn btn-primary btn-block btn-flat">注册
+            </button>
+          </div>
+        </div>
+      </form>
+      <!-- login-social -->
+    </div>
+  </div>
+
+

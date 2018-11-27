@@ -1,0 +1,78 @@
+<img src="/assets/image/bj.jpg" style="position: fixed;z-index: -1;width: 100%;height: 100%;top: 0;">
+<app-alert [alert]="alert" [timeout]="3000" [msg]="msg" (msg_)="reloadAlertMsg($event)"></app-alert>
+<div class="register-box">
+  <!-- register-logo -->
+  <div class="register-logo">
+    <img src="/assets/image/long.jpg" style="max-height: 40px" />
+    <a routerLink="/" routerLinkActive="click"><b style="color: #00a7d0">Long</b></a>
+  </div>
+  <!-- register-body -->
+  <div class="register-box-body" style="background-color: #ffffff00">
+   <!--  <p class="register-box-msg"><b style="font-size: large;color:white;">注册</b></p> -->
+    <form>
+      <!-- register-userName -->
+      <div class="form-group has-feedback">
+        <input [(ngModel)]="username" type="text" name="username" class="form-control" placeholder="用户名" readonly onfocus="this.removeAttribute('readonly');" (keyup.enter)="check()">
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+      <!-- register-password -->
+      <div class="form-group has-feedback">
+        <input [(ngModel)]="password" type="password" name="password" class="form-control" placeholder="密码" readonly onfocus="this.removeAttribute('readonly');" (keyup.enter)="check()" (keyup)="checkpswLv()">
+        <span class="fa fa-lock form-control-feedback"></span>
+        <div *ngIf="pswClass!=0" class="row">
+          <em  class="col-xs-4" style="color:  snow;">密码强度：</em>
+          <div *ngIf="pswClass==1" class="col-xs-8 strengthLv1"></div>
+          <div *ngIf="pswClass==2" class="col-xs-8 strengthLv2"></div>
+          <div *ngIf="pswClass==3" class="col-xs-8 strengthLv3"></div>
+        </div>
+      </div>
+      <!-- register-password -->
+      <div class="form-group has-feedback">
+        <input [(ngModel)]="repassword" type="password" name="repassword" class="form-control" placeholder="再次输入密码" readonly onfocus="this.removeAttribute('readonly');" (keyup.enter)="check()">
+        <span class="fa fa-lock form-control-feedback"></span>
+      </div>
+      <div>
+        <label class="radio-inline" style="color: white;">
+          <input type="radio" #option1 name="inlineRadioOptions" id="inlineRadio1" value="option1" checked (click)="changeOption(option1.value)"> 手机号验证
+        </label>
+        <label class="radio-inline" style="color: white;">
+          <input type="radio" #option2 name="inlineRadioOptions" id="inlineRadio2" value="option2" (click)="changeOption(option2.value)"> 邮箱验证
+        </label>
+      </div>
+      <div class="row" *ngIf="checkPhone">
+        <div class="col-xs-7 form-group has-feedback">
+          <input [(ngModel)]="phone" name="phone" class="form-control" placeholder="手机号" readonly onfocus="this.removeAttribute('readonly');" (keyup.enter)="check()">
+          <span class="fa fa-phone form-control-feedback" style="padding-right: 25px;"></span>
+        </div>
+        <div class="col-xs-4 form-group has-feedback">
+          <button  id="sendBtn1" (click)="sendToPhone()" type="submit" class="btn btn-primary btn-block btn-flat" style="
+    padding: 5px;">发送验证码</button>
+        </div>
+      </div>
+      <div class="row" *ngIf="!checkPhone">
+        <div class="col-xs-7 form-group has-feedback">
+          <input [(ngModel)]="email" name="email" type="email" class="form-control" placeholder="邮箱" readonly onfocus="this.removeAttribute('readonly');" (keyup.enter)="check()">
+          <span class="fa fa-envelope-o form-control-feedback" style="padding-right: 25px;"></span>
+        </div>
+        <div class="col-xs-4 form-group has-feedback">
+          <button id="sendBtn2" (click)="sendToMail()" type="submit" class="btn btn-primary btn-block btn-flat" style="
+    padding: 5px;">发送验证码</button>
+        </div>
+      </div>
+      <div class="form-group has-feedback">
+        <span class="fa fa-shield form-control-feedback" aria-hidden="true"></span>
+        <input class="form-control" type="text" [(ngModel)]="verCode" readonly onfocus="this.removeAttribute('readonly');" name="verCode" placeholder="验证码" maxlength="6">
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+          <button [disabled]="isDisabled" (click)="register()" type="submit" class="btn btn-primary btn-block btn-flat">注册</button>
+        </div>
+        <!-- login-submit -->
+        <div class="col-xs-4">
+          <button [disabled]="isDisabled" routerLink="/login" routerLinkActive="active" type="submit" class="btn btn-primary btn-block btn-flat">登录</button>
+        </div>
+      </div>
+    </form>
+    <!-- register-social -->
+  </div>
+</div>
